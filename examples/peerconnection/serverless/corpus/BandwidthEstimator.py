@@ -14,7 +14,6 @@ class Estimator(object):
             "payload_size": uint
         }
         '''
-        pass
-
+        print(f'Got stats: {stats}')
     def get_estimated_bandwidth(self)->int:
         return int(1e6) # 1Mbps

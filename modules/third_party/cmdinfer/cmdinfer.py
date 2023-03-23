@@ -39,6 +39,7 @@ def main(ifd = sys.stdin, ofd = sys.stdout):
             break
         if isinstance(line, bytes):
             line = line.decode("utf-8")
+        print(line)
         stats = fetch_stats(line)
         if stats:
             estimator.report_states(stats)
