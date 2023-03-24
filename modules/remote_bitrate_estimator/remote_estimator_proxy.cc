@@ -119,8 +119,10 @@ void RemoteEstimatorProxy::IncomingPacket(int64_t arrival_time_ms,
     if (onnx_infer_) {
       estimation = onnxinfer::GetBweEstimate(onnx_infer_);
     } else {
+      estimation = onnxinfer::GetBweEstimate(onnx_infer_);
       estimation = cmdinfer::GetEstimatedBandwidth();
     }
+    RTC_LOG(LS_INFO) << "Estimated bandwidth: " << estimation;
     bwe.pacing_rate = bwe.padding_rate = bwe.target_rate = estimation;
     bwe.timestamp_ms = clock_->TimeInMilliseconds();
     SendbackBweEstimation(bwe);

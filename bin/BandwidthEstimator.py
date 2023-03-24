@@ -15,5 +15,6 @@ class Estimator(object):
         }
         '''
         # print(f'Got stats: {stats}')
+        pass
     def get_estimated_bandwidth(self)->int:
-        return int(1e6) # 1Mbps
+        return int(1e7) # 1Mbps
