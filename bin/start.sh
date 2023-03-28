@@ -1,10 +1,9 @@
-cd /home/lix16/Workspace/Pandia/AlphaRTC-gym/AlphaRTC
+cd /home/lix16/Workspace/Pandia/AlphaRTC
 
 # gn gen out/Default --args='is_debug=true'
-ninja -C out/Default peerconnection_serverless
-
-tmux send-key -t alpha:0 'LD_LIBRARY_PATH=`pwd`/lib:$LD_LIBRARY_PATH ./peerconnection_serverless ./receiver.json' Enter
-sleep .1
+ninja -C out/Default peerconnection_serverless && \
+tmux send-key -t alpha:0 'LD_LIBRARY_PATH=`pwd`/lib:$LD_LIBRARY_PATH ./peerconnection_serverless ./receiver.json' Enter && \
+sleep .1 && \
 tmux send-key -t alpha:1 'LD_LIBRARY_PATH=`pwd`/lib:$LD_LIBRARY_PATH ./peerconnection_serverless ./sender.json' Enter
 
 cd -

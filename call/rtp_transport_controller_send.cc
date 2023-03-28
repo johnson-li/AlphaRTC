@@ -397,6 +397,10 @@ void RtpTransportControllerSend::EnablePeriodicAlrProbing(bool enable) {
 }
 void RtpTransportControllerSend::OnSentPacket(
     const rtc::SentPacket& sent_packet) {
+  RTC_LOG(LS_INFO) << "OnSentPacket, " << webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+      ", id: " << sent_packet.packet_id << 
+      ", type: " << sent_packet.info.packet_type << 
+      ", size: " << sent_packet.info.packet_size_bytes;
   task_queue_.PostTask([this, sent_packet]() {
     RTC_DCHECK_RUN_ON(&task_queue_);
     absl::optional<SentPacket> packet_msg =
@@ -536,6 +540,12 @@ void RtpTransportControllerSend::OnAddPacket(
 
 void RtpTransportControllerSend::OnTransportFeedback(
     const rtcp::TransportFeedback& feedback) {
+  auto packets = feedback.GetAllPackets();
+  for (auto& packet : packets) {
+      RTC_LOG(LS_INFO) << "OnTransportFeedback, " << webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() <<
+      ", id: " << packet.sequence_number() << 
+      ", received: " << packet.received() << ", RTT: " << webrtc::ToString(packet.delta());
+  }
   feedback_demuxer_.OnTransportFeedback(feedback);
   auto feedback_time = Timestamp::Millis(clock_->TimeInMilliseconds());
   task_queue_.PostTask([this, feedback, feedback_time]() {
@@ -705,6 +715,9 @@ void RtpTransportControllerSend::OnReceivedRtcpReceiverReportBlocks(
   msg.receive_time = now;
   msg.start_time = last_report_block_time_;
   msg.end_time = now;
+  RTC_LOG(LS_INFO) << "OnTransportLossReport, " << now_ms << 
+      ", packets lost: " << msg.packets_lost_delta << 
+      ", packets received: " << msg.packets_received_delta; 
   if (controller_)
     PostUpdates(controller_->OnTransportLossReport(msg));
   last_report_block_time_ = now;

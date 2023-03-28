@@ -373,6 +373,8 @@ std::vector<ProbeClusterConfig> GoogCcNetworkController::ResetConstraints(
 
 NetworkControlUpdate GoogCcNetworkController::OnTransportLossReport(
     TransportLossReport msg) {
+  RTC_LOG(LS_INFO) << "OnTransportLossReport, packets: " << 
+      msg.packets_received_delta + msg.packets_lost_delta;
   if (packet_feedback_only_)
     return NetworkControlUpdate();
   int64_t total_packets_delta =
@@ -429,6 +431,8 @@ NetworkControlUpdate GoogCcNetworkController::OnTransportPacketsFeedback(
     TimeDelta propagation_rtt = feedback_rtt - min_pending_time;
     max_feedback_rtt = std::max(max_feedback_rtt, feedback_rtt);
     min_propagation_rtt = std::min(min_propagation_rtt, propagation_rtt);
+    RTC_LOG(LS_INFO) << "OnTransportPacketFeedback, size: " << feedback.sent_packet.size 
+        << ", rtt: " << propagation_rtt;
   }
 
   if (max_feedback_rtt.IsFinite()) {

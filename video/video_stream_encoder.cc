@@ -821,6 +821,8 @@ void VideoStreamEncoder::OnEncoderSettingsChanged() {
 void VideoStreamEncoder::OnFrame(const VideoFrame& video_frame) {
   RTC_DCHECK_RUNS_SERIALIZED(&incoming_frame_race_checker_);
   VideoFrame incoming_frame = video_frame;
+  RTC_LOG(LS_INFO) << "OnFrame, " << webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+      ", id: " << video_frame.id();
 
   // Local time in webrtc time base.
   int64_t current_time_us = clock_->TimeInMicroseconds();
@@ -1424,6 +1426,8 @@ EncodedImageCallback::Result VideoStreamEncoder::OnEncodedImage(
     const EncodedImage& encoded_image,
     const CodecSpecificInfo* codec_specific_info,
     const RTPFragmentationHeader* fragmentation) {
+  RTC_LOG(LS_INFO) << "RunPostEncode, " << webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+      ", size: " << encoded_image.size();
   TRACE_EVENT_INSTANT1("webrtc", "VCMEncodedFrameCallback::Encoded",
                        "timestamp", encoded_image.Timestamp());
   const size_t spatial_idx = encoded_image.SpatialIndex().value_or(0);
