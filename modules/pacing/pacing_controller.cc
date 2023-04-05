@@ -214,6 +214,9 @@ void PacingController::SetProbingEnabled(bool enabled) {
 void PacingController::SetPacingRates(DataRate pacing_rate,
                                       DataRate padding_rate) {
   RTC_DCHECK_GT(pacing_rate, DataRate::Zero());
+  RTC_LOG(LS_INFO) << "SetPacingRates, " <<
+      webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+      ", pacing rate (kbps): " << pacing_bitrate_.kbps();
   media_rate_ = pacing_rate;
   padding_rate_ = padding_rate;
   pacing_bitrate_ = pacing_rate;
@@ -348,6 +351,9 @@ Timestamp PacingController::NextSendTime() const {
 
   if (mode_ == ProcessMode::kPeriodic) {
     // In periodic non-probing mode, we just have a fixed interval.
+    RTC_LOG(LS_INFO) << "Min packet limit: " << min_packet_limit_.ms() <<
+        ", now: " << now.ms() << 
+        ", last process time: " << last_process_time_.ms();
     return last_process_time_ + min_packet_limit_;
   }
 
@@ -366,11 +372,16 @@ Timestamp PacingController::NextSendTime() const {
 
   if (Congested() || packet_counter_ == 0) {
     // We need to at least send keep-alive packets with some interval.
+    RTC_LOG(LS_INFO) << "Congested";
     return last_send_time_ + kCongestedPacketInterval;
   }
 
   // Check how long until we can send the next media packet.
   if (media_rate_ > DataRate::Zero() && !packet_queue_.Empty()) {
+    RTC_LOG(LS_INFO) << "Now: " << now.ms() << 
+        ", last process time: " << last_process_time_.ms() << 
+        ", media debt: " << media_debt_.bytes() << 
+        ", media rate: " << media_rate_.kbps();
     return std::min(last_send_time_ + kPausedProcessInterval,
                     last_process_time_ + media_debt_ / media_rate_);
   }
@@ -693,6 +704,10 @@ void PacingController::UpdateBudgetWithElapsedTime(TimeDelta delta) {
     media_debt_ -= std::min(media_debt_, media_rate_ * delta);
     padding_debt_ -= std::min(padding_debt_, padding_rate_ * delta);
   }
+  RTC_LOG(LS_INFO) << "UpdateBudgetWithElapsedTime, " <<
+      ", outstanding data: " << outstanding_data_.bytes() <<
+      ", media budget target rate (kbps): " << media_budget_.target_rate_kbps() <<
+      ", media budget remaining: " << media_budget_.bytes_remaining();
 }
 
 void PacingController::UpdateBudgetWithSentData(DataSize size) {
@@ -706,6 +721,9 @@ void PacingController::UpdateBudgetWithSentData(DataSize size) {
     padding_debt_ += size;
     padding_debt_ = std::min(padding_debt_, padding_rate_ * kMaxDebtInTime);
   }
+  RTC_LOG(LS_INFO) << "UpdateBudgetWithSentData, " <<
+      "outstanding data: " << outstanding_data_.bytes() <<
+      "media budget: " << media_budget_.bytes_remaining();
 }
 
 void PacingController::SetQueueTimeLimit(TimeDelta limit) {

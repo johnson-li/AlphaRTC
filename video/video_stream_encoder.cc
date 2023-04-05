@@ -822,7 +822,8 @@ void VideoStreamEncoder::OnFrame(const VideoFrame& video_frame) {
   RTC_DCHECK_RUNS_SERIALIZED(&incoming_frame_race_checker_);
   VideoFrame incoming_frame = video_frame;
   RTC_LOG(LS_INFO) << "OnFrame, " << webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
-      ", id: " << video_frame.id();
+      ", id: " << video_frame.id() <<
+      ", captured at " << video_frame.timestamp_us() / 1000;
 
   // Local time in webrtc time base.
   int64_t current_time_us = clock_->TimeInMicroseconds();
@@ -1025,6 +1026,17 @@ uint32_t VideoStreamEncoder::GetInputFramerateFps() {
 void VideoStreamEncoder::SetEncoderRates(
     const EncoderRateSettings& rate_settings) {
   RTC_DCHECK_GT(rate_settings.rate_control.framerate_fps, 0.0);
+  RTC_LOG(LS_INFO) << "SetEncoderRates, bitrate: " << rate_settings.rate_control.bitrate.get_sum_kbps() << 
+      " kbps, fps: " << rate_settings.rate_control.framerate_fps << 
+      ", bwe: " << rate_settings.rate_control.bandwidth_allocation.kbps() << " kbps";
+  for (int i: {1, 2, 3, 4}) {
+      if (rate_settings.rate_control.bitrate.HasBitrate(i, 1)) {
+        RTC_LOG(LS_INFO) << "SetEncoderRates["<< i << "], bitrate: " << 
+            rate_settings.rate_control.bitrate.GetBitrate(i, 0);
+      } else {
+        break;
+      }
+  }
   bool rate_control_changed =
       (!last_encoder_rate_settings_.has_value() ||
        last_encoder_rate_settings_->rate_control != rate_settings.rate_control);
@@ -1427,7 +1439,11 @@ EncodedImageCallback::Result VideoStreamEncoder::OnEncodedImage(
     const CodecSpecificInfo* codec_specific_info,
     const RTPFragmentationHeader* fragmentation) {
   RTC_LOG(LS_INFO) << "RunPostEncode, " << webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
-      ", size: " << encoded_image.size();
+      ", codec: " << codec_specific_info->codecType <<
+      ", size: " << encoded_image.size() <<
+      ", width: " << encoded_image._encodedWidth <<
+      ", height: " << encoded_image._encodedHeight <<
+      ", captured at: " << encoded_image.capture_time_ms_;
   TRACE_EVENT_INSTANT1("webrtc", "VCMEncodedFrameCallback::Encoded",
                        "timestamp", encoded_image.Timestamp());
   const size_t spatial_idx = encoded_image.SpatialIndex().value_or(0);

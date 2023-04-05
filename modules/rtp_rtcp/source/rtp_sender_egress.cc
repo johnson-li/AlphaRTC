@@ -416,6 +416,9 @@ void RtpSenderEgress::UpdateOnSendPacket(int packet_id,
 bool RtpSenderEgress::SendPacketToNetwork(const RtpPacketToSend& packet,
                                           const PacketOptions& options,
                                           const PacedPacketInfo& pacing_info) {
+  RTC_LOG(LS_INFO) << "SendPacketToNetwork, " << 
+      webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+      ", bytes: " << packet.size();
   int bytes_sent = -1;
   if (transport_) {
     bytes_sent = transport_->SendRtp(packet.data(), packet.size(), options)

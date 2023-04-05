@@ -992,6 +992,11 @@ void RTCPReceiver::NotifyTmmbrUpdated() {
 // Holding no Critical section.
 void RTCPReceiver::TriggerCallbacksFromRtcpPacket(
     const PacketInformation& packet_information) {
+  RTC_LOG(LS_INFO) << "TriggerCallbacksFromRtcpPacket, " <<    
+      webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+      ", type: " << packet_information.packet_type_flags;
+  if (packet_information.packet_type_flags & kRtcpTransportFeedback) {
+  }
   // Process TMMBR and REMB first to avoid multiple callbacks
   // to OnNetworkChanged.
   if (packet_information.packet_type_flags & kRtcpTmmbr) {
@@ -1011,9 +1016,11 @@ void RTCPReceiver::TriggerCallbacksFromRtcpPacket(
   }
   if (!receiver_only_ && (packet_information.packet_type_flags & kRtcpNack)) {
     if (!packet_information.nack_sequence_numbers.empty()) {
-      RTC_LOG(LS_VERBOSE) << "Incoming NACK length: "
+      RTC_LOG(LS_INFO) << "Incoming NACK length: "
                           << packet_information.nack_sequence_numbers.size();
       rtp_rtcp_->OnReceivedNack(packet_information.nack_sequence_numbers);
+    } else {
+      RTC_LOG(LS_INFO) << "Incoming NACK length: 0";
     }
   }
 

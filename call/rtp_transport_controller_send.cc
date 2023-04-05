@@ -397,7 +397,8 @@ void RtpTransportControllerSend::EnablePeriodicAlrProbing(bool enable) {
 }
 void RtpTransportControllerSend::OnSentPacket(
     const rtc::SentPacket& sent_packet) {
-  RTC_LOG(LS_INFO) << "OnSentPacket, " << webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+  RTC_LOG(LS_INFO) << "OnSentPacket, " << 
+      webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
       ", id: " << sent_packet.packet_id << 
       ", type: " << sent_packet.info.packet_type << 
       ", size: " << sent_packet.info.packet_size_bytes;
@@ -576,6 +577,10 @@ void RtpTransportControllerSend::OnRemoteNetworkEstimate(
 }
 
 void RtpTransportControllerSend::OnApplicationPacket(const rtcp::App& app) {
+  RTC_LOG(LS_INFO) << "OnApplicationPacket, " << 
+      webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+      ", subtype: " << app.sub_type() <<
+      ", name: " << app.name();
   if (app.sub_type() != kAppPacketSubType || app.name() != kAppPacketName) {
     return;
   }
