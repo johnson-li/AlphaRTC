@@ -351,9 +351,9 @@ Timestamp PacingController::NextSendTime() const {
 
   if (mode_ == ProcessMode::kPeriodic) {
     // In periodic non-probing mode, we just have a fixed interval.
-    RTC_LOG(LS_INFO) << "Min packet limit: " << min_packet_limit_.ms() <<
-        ", now: " << now.ms() << 
-        ", last process time: " << last_process_time_.ms();
+    // RTC_LOG(LS_INFO) << "Min packet limit: " << min_packet_limit_.ms() <<
+    //     ", now: " << now.ms() << 
+    //     ", last process time: " << last_process_time_.ms();
     return last_process_time_ + min_packet_limit_;
   }
 
@@ -704,10 +704,10 @@ void PacingController::UpdateBudgetWithElapsedTime(TimeDelta delta) {
     media_debt_ -= std::min(media_debt_, media_rate_ * delta);
     padding_debt_ -= std::min(padding_debt_, padding_rate_ * delta);
   }
-  RTC_LOG(LS_INFO) << "UpdateBudgetWithElapsedTime, " <<
-      ", outstanding data: " << outstanding_data_.bytes() <<
-      ", media budget target rate (kbps): " << media_budget_.target_rate_kbps() <<
-      ", media budget remaining: " << media_budget_.bytes_remaining();
+  // RTC_LOG(LS_INFO) << "UpdateBudgetWithElapsedTime" <<
+  //     ", outstanding data: " << outstanding_data_.bytes() <<
+  //     ", media budget target rate (kbps): " << media_budget_.target_rate_kbps() <<
+  //     ", media budget remaining: " << media_budget_.bytes_remaining();
 }
 
 void PacingController::UpdateBudgetWithSentData(DataSize size) {
@@ -721,9 +721,9 @@ void PacingController::UpdateBudgetWithSentData(DataSize size) {
     padding_debt_ += size;
     padding_debt_ = std::min(padding_debt_, padding_rate_ * kMaxDebtInTime);
   }
-  RTC_LOG(LS_INFO) << "UpdateBudgetWithSentData, " <<
-      "outstanding data: " << outstanding_data_.bytes() <<
-      "media budget: " << media_budget_.bytes_remaining();
+  // RTC_LOG(LS_INFO) << "UpdateBudgetWithSentData, " <<
+  //     "outstanding data: " << outstanding_data_.bytes() <<
+  //     "media budget: " << media_budget_.bytes_remaining();
 }
 
 void PacingController::SetQueueTimeLimit(TimeDelta limit) {

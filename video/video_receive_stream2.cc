@@ -489,6 +489,13 @@ int VideoReceiveStream2::GetBaseMinimumPlayoutDelayMs() const {
 void VideoReceiveStream2::OnFrame(const VideoFrame& video_frame) {
   VideoFrameMetaData frame_meta(video_frame, clock_->CurrentTime());
 
+  RTC_LOG(LS_INFO) << "OnFrame, " <<
+      webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+      ", id: " << video_frame.id() <<
+      ", timestamp: " << video_frame.timestamp() <<
+      ", size: " << video_frame.size() <<
+      ", transport frame id: " << video_frame.transport_frame_id();
+
   worker_thread_->PostTask(
       ToQueuedTask(task_safety_, [frame_meta, this]() {
         RTC_DCHECK_RUN_ON(&worker_sequence_checker_);
@@ -654,6 +661,11 @@ void VideoReceiveStream2::HandleEncodedFrame(
   int decode_result = video_receiver_.Decode(frame.get());
   if (decode_result == WEBRTC_VIDEO_CODEC_OK ||
       decode_result == WEBRTC_VIDEO_CODEC_OK_REQUEST_KEYFRAME) {
+    RTC_LOG(LS_INFO) << "HandleEncodedFrame, " << 
+        webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+        ", id: " << frame->id.picture_id << 
+        ", codec: " << frame->CodecSpecific()->codecType <<
+        ", decode result: " << decode_result;
     keyframe_required_ = false;
     frame_decoded_ = true;
     rtp_video_stream_receiver_.FrameDecoded(frame->id.picture_id);

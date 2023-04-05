@@ -668,6 +668,11 @@ void VideoReceiveStream::HandleEncodedFrame(
   int decode_result = video_receiver_.Decode(frame.get());
   if (decode_result == WEBRTC_VIDEO_CODEC_OK ||
       decode_result == WEBRTC_VIDEO_CODEC_OK_REQUEST_KEYFRAME) {
+    RTC_LOG(LS_INFO) << "HandleEncodedFrame" << 
+        webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+        ", id: " << frame->id.picture_id << 
+        ", codec: " << frame->CodecSpecific()->codecType <<
+        ", decode result: " << decode_result;
     keyframe_required_ = false;
     frame_decoded_ = true;
     rtp_video_stream_receiver_.FrameDecoded(frame->id.picture_id);
