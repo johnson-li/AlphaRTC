@@ -1026,9 +1026,10 @@ uint32_t VideoStreamEncoder::GetInputFramerateFps() {
 void VideoStreamEncoder::SetEncoderRates(
     const EncoderRateSettings& rate_settings) {
   RTC_DCHECK_GT(rate_settings.rate_control.framerate_fps, 0.0);
-  RTC_LOG(LS_INFO) << "SetEncoderRates, bitrate: " << rate_settings.rate_control.bitrate.get_sum_kbps() << 
-      " kbps, fps: " << rate_settings.rate_control.framerate_fps << 
-      ", bwe: " << rate_settings.rate_control.bandwidth_allocation.kbps() << " kbps";
+  RTC_LOG(LS_INFO) << "SetEncoderRates" << 
+      ", bitrate (kbps): " << rate_settings.rate_control.bitrate.get_sum_kbps() << 
+      ", fps: " << rate_settings.rate_control.framerate_fps << 
+      ", bwe (kbps): " << rate_settings.rate_control.bandwidth_allocation.kbps();
   for (int i: {1, 2, 3, 4}) {
       if (rate_settings.rate_control.bitrate.HasBitrate(i, 1)) {
         RTC_LOG(LS_INFO) << "SetEncoderRates["<< i << "], bitrate: " << 

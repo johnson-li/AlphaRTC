@@ -2960,8 +2960,19 @@ void WebRtcVideoChannel::WebRtcVideoReceiveStream::
   }
 }
 
+void WebRtcVideoChannel::OnFrame(
+    const webrtc::VideoFrame& frame) {
+  // Johnson
+  invoker_.AsyncInvoke<void>(
+      RTC_FROM_HERE, worker_thread_, [this, frame] {
+        RTC_DCHECK_RUN_ON(&thread_checker_);
+        call_->Receiver()->OnFrameDecoded(frame.id());
+      });
+}
+
 void WebRtcVideoChannel::WebRtcVideoReceiveStream::OnFrame(
     const webrtc::VideoFrame& frame) {
+  channel_->OnFrame(frame);
   rtc::CritScope crit(&sink_lock_);
 
   int64_t time_now_ms = rtc::TimeMillis();

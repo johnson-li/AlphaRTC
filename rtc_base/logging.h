@@ -593,6 +593,7 @@ class LogMessage {
               << ::rtc::webrtc_logging_impl::LogMetadata(file, line, sev)
 
 #define RTC_LOG(sev) RTC_LOG_FILE_LINE(::rtc::sev, __FILE__, __LINE__)
+#define RTC_INFO RTC_LOG(LS_INFO)
 
 // The _V version is for when a variable is passed in.
 #define RTC_LOG_V(sev) RTC_LOG_FILE_LINE(sev, __FILE__, __LINE__)

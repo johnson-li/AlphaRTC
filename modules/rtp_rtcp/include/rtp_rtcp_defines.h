@@ -42,6 +42,12 @@ class App;
 const uint8_t kAppPacketSubType = 1;
 const uint32_t kAppPacketName = ((uint32_t)'r' << 24) | ((uint32_t)'a' << 16) |
                                 ((uint32_t)'t' << 8) | (uint32_t)'e';
+const uint8_t kAppFrameRecvSubType = 2;
+const uint32_t kAppFrameRecvName = ((uint32_t)'r' << 24) | ((uint32_t)'e' << 16) |
+                                ((uint32_t)'c' << 8) | (uint32_t)'v';
+const uint8_t kAppFrameDecodeSubType = 3;
+const uint32_t kAppFrameDecodeName = ((uint32_t)'d' << 24) | ((uint32_t)'e' << 16) |
+                                ((uint32_t)'c' << 8) | (uint32_t)'o';
 const int kVideoPayloadTypeFrequency = 90000;
 
 // TODO(bugs.webrtc.org/6458): Remove this when all the depending projects are

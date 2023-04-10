@@ -887,6 +887,9 @@ void RtpVideoStreamReceiver::OnCompleteFrame(
   }
   last_completed_picture_id_ =
       std::max(last_completed_picture_id_, frame->id.picture_id);
+  RTC_INFO << "OnCompleteFrame, " << 
+      webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+      ", id: " << frame->id.picture_id;
   complete_frame_callback_->OnCompleteFrame(std::move(frame));
 }
 

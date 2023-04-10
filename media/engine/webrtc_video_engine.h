@@ -169,6 +169,7 @@ class WebRtcVideoChannel : public VideoMediaChannel,
   void OnReadyToSend(bool ready) override;
   void OnNetworkRouteChanged(const std::string& transport_name,
                              const rtc::NetworkRoute& network_route) override;
+  void OnFrame(const webrtc::VideoFrame& frame) ;
   void SetInterface(
       NetworkInterface* iface,
       const webrtc::MediaTransportConfig& media_transport_config) override;

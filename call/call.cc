@@ -220,6 +220,8 @@ class Call final : public webrtc::Call,
   DeliveryStatus DeliverPacket(MediaType media_type,
                                rtc::CopyOnWriteBuffer packet,
                                int64_t packet_time_us) override;
+  void OnFrameReceived(uint32_t id) override;
+  void OnFrameDecoded(uint32_t id) override;
 
   // Implements RecoveredPacketReceiver.
   void OnRecoveredPacket(const uint8_t* packet, size_t length) override;
@@ -252,6 +254,8 @@ class Call final : public webrtc::Call,
 
   void NotifyBweOfReceivedPacket(const RtpPacketReceived& packet,
                                  MediaType media_type)
+      RTC_SHARED_LOCKS_REQUIRED(receive_crit_);
+  void NotifyBweOfReceivedFrame(uint32_t id)
       RTC_SHARED_LOCKS_REQUIRED(receive_crit_);
 
   void UpdateSendHistograms(Timestamp first_sent_packet)
@@ -1311,6 +1315,26 @@ PacketReceiver::DeliveryStatus Call::DeliverRtp(MediaType media_type,
   return DELIVERY_UNKNOWN_SSRC;
 }
 
+void Call::OnFrameReceived(uint32_t id) {
+  auto app_packet = std::make_unique<rtcp::App>();
+  app_packet->SetSubType(kAppFrameRecvSubType);
+  app_packet->SetName(kAppFrameRecvName);
+  app_packet->SetData(reinterpret_cast<const uint8_t*>(&id), sizeof(id));
+  std::vector<std::unique_ptr<rtcp::RtcpPacket>> packets;
+  packets.push_back(std::move(app_packet));
+  transport_send_->packet_router()->SendCombinedRtcpPacket(std::move(packets));
+}
+
+void Call::OnFrameDecoded(uint32_t id) {
+  auto app_packet = std::make_unique<rtcp::App>();
+  app_packet->SetSubType(kAppFrameDecodeSubType);
+  app_packet->SetName(kAppFrameDecodeName);
+  app_packet->SetData(reinterpret_cast<const uint8_t*>(&id), sizeof(id));
+  std::vector<std::unique_ptr<rtcp::RtcpPacket>> packets;
+  packets.push_back(std::move(app_packet));
+  transport_send_->packet_router()->SendCombinedRtcpPacket(std::move(packets));
+}
+
 PacketReceiver::DeliveryStatus Call::DeliverPacket(
     MediaType media_type,
     rtc::CopyOnWriteBuffer packet,
@@ -1347,6 +1371,10 @@ void Call::OnRecoveredPacket(const uint8_t* packet, size_t length) {
   // TODO(brandtr): Update here when we support protecting audio packets too.
   parsed_packet.set_payload_type_frequency(kVideoPayloadTypeFrequency);
   video_receiver_controller_.OnRtpPacket(parsed_packet);
+}
+
+void Call::NotifyBweOfReceivedFrame(uint32_t id) {
+  
 }
 
 void Call::NotifyBweOfReceivedPacket(const RtpPacketReceived& packet,
