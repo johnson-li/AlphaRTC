@@ -1,5 +1,5 @@
 cd /home/lix16/Workspace/Pandia/AlphaRTC
-rm results/*
+rm results/* 2> /dev/null
 
 # gn gen out/Default --args='is_debug=true'
 ninja -C out/Default peerconnection_serverless && \

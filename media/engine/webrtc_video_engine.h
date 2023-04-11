@@ -170,6 +170,7 @@ class WebRtcVideoChannel : public VideoMediaChannel,
   void OnNetworkRouteChanged(const std::string& transport_name,
                              const rtc::NetworkRoute& network_route) override;
   void OnFrame(const webrtc::VideoFrame& frame) ;
+  void OnCompleteFrame0(uint32_t frame_id) ;
   void SetInterface(
       NetworkInterface* iface,
       const webrtc::MediaTransportConfig& media_transport_config) override;
@@ -470,6 +471,7 @@ class WebRtcVideoChannel : public VideoMediaChannel,
     void SetRecvParameters(const ChangedRecvParameters& recv_params);
 
     void OnFrame(const webrtc::VideoFrame& frame) override;
+    void OnCompleteFrame0(uint32_t frame_id) override;
     bool IsDefaultStream() const;
 
     void SetFrameDecryptor(

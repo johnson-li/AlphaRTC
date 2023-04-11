@@ -2959,6 +2959,17 @@ void WebRtcVideoChannel::WebRtcVideoReceiveStream::
     stream_->RemoveSecondarySink(flexfec_stream_);
   }
 }
+void WebRtcVideoChannel::OnCompleteFrame0(uint32_t frame_id) {
+  invoker_.AsyncInvoke<void>(
+      RTC_FROM_HERE, worker_thread_, [this, frame_id] {
+        RTC_DCHECK_RUN_ON(&thread_checker_);
+        call_->Receiver()->OnFrameReceived(frame_id);
+      });
+}
+
+void WebRtcVideoChannel::WebRtcVideoReceiveStream::OnCompleteFrame0(uint32_t frame_id) {
+  channel_->OnCompleteFrame0(frame_id);
+}
 
 void WebRtcVideoChannel::OnFrame(
     const webrtc::VideoFrame& frame) {

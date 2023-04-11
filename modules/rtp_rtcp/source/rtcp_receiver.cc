@@ -997,7 +997,9 @@ void RTCPReceiver::TriggerCallbacksFromRtcpPacket(
       ", type: " << packet_information.packet_type_flags;
   if (packet_information.packet_type_flags & kRtcpApp) {
     uint32_t name = packet_information.application->name();
-    RTC_LOG(LS_INFO) << "Receive RTCP app, name: " << 
+    RTC_LOG(LS_INFO) << "Receive RTCP app, " << 
+        webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+        ", name: " <<
         (name == kAppPacketName ? "Packet" : (name == kAppFrameRecvName ? "FrameRecv" : (name == kAppFrameDecodeName ? "FrameDecode" : "Unknown")));
   }
   // Process TMMBR and REMB first to avoid multiple callbacks
