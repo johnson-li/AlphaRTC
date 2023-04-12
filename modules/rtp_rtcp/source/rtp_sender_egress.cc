@@ -170,6 +170,7 @@ void RtpSenderEgress::SendPacket(RtpPacketToSend* packet,
     options.packet_id = *packet_id;
     options.included_in_feedback = true;
     options.included_in_allocation = true;
+    RTC_INFO << "SendPacket, packet id: " << *packet_id << ", sequence id: " << packet->SequenceNumber();
     AddPacketToTransportFeedback(*packet_id, *packet, pacing_info);
   }
 

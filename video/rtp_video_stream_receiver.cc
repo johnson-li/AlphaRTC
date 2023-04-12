@@ -655,7 +655,9 @@ void RtpVideoStreamReceiver::OnRtpPacket(const RtpPacketReceived& packet) {
     return;
   }
 
-  RTC_INFO << "OnRtpPacket, id: " << packet.SequenceNumber();
+  RTC_INFO << "OnRtpPacket, " << 
+      webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+      ", id: " << packet.SequenceNumber();
   if (!packet.recovered()) {
     // TODO(nisse): Exclude out-of-order packets?
     int64_t now_ms = clock_->TimeInMilliseconds();
