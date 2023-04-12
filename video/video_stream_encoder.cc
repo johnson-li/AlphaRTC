@@ -818,12 +818,15 @@ void VideoStreamEncoder::OnEncoderSettingsChanged() {
   });
 }
 
+uint32_t VideoStreamEncoder::frame_id = 0;
+
 void VideoStreamEncoder::OnFrame(const VideoFrame& video_frame) {
   RTC_DCHECK_RUNS_SERIALIZED(&incoming_frame_race_checker_);
   VideoFrame incoming_frame = video_frame;
+  incoming_frame.set_id(frame_id++);
   RTC_LOG(LS_INFO) << "OnFrame, " << webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
-      ", id: " << video_frame.id() <<
-      ", captured at: " << video_frame.timestamp_us() / 1000;
+      ", id: " << incoming_frame.id() <<  
+      ", captured at: " << incoming_frame.timestamp_us() / 1000;
 
   // Local time in webrtc time base.
   int64_t current_time_us = clock_->TimeInMicroseconds();

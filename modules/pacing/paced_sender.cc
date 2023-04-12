@@ -196,6 +196,12 @@ void PacedSender::SetQueueTimeLimit(TimeDelta limit) {
 
 void PacedSender::SendRtpPacket(std::unique_ptr<RtpPacketToSend> packet,
                                 const PacedPacketInfo& cluster_info) {
+  RTC_INFO << "SendRtpPacket, " <<
+      webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+      ", id: " << packet->SequenceNumber() << 
+      ", payload type: " << packet->PayloadType() <<
+      ", payload size: " << packet->payload_size() <<
+      ", size: " << packet->size();
   critsect_.Leave();
   packet_router_->SendPacket(std::move(packet), cluster_info);
   critsect_.Enter();

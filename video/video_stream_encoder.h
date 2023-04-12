@@ -345,6 +345,7 @@ class VideoStreamEncoder : public VideoStreamEncoderInterface,
   rtc::CriticalSection encoded_image_lock_;
 
   int64_t next_frame_id_ RTC_GUARDED_BY(encoded_image_lock_);
+  static uint32_t frame_id;
 
   // This array is used as a map from simulcast id to an encoder's buffer
   // state. For every buffer of the encoder we keep track of the last frame id

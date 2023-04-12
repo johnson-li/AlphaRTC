@@ -997,10 +997,15 @@ void RTCPReceiver::TriggerCallbacksFromRtcpPacket(
       ", type: " << packet_information.packet_type_flags;
   if (packet_information.packet_type_flags & kRtcpApp) {
     uint32_t name = packet_information.application->name();
-    RTC_LOG(LS_INFO) << "Receive RTCP app, " << 
-        webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
-        ", name: " <<
-        (name == kAppPacketName ? "Packet" : (name == kAppFrameRecvName ? "FrameRecv" : (name == kAppFrameDecodeName ? "FrameDecode" : "Unknown")));
+    if (name == kAppFrameRecvName || name == kAppFrameDecodeName) {
+      uint32_t frame_id = -1;
+      std::memcpy(&frame_id, packet_information.application->data(), sizeof(frame_id));
+      RTC_LOG(LS_INFO) << "Receive RTCP app, " << 
+          webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+          ", name: " <<
+          (name == kAppFrameRecvName ? "FrameRecv" : (name == kAppFrameDecodeName ? "FrameDecode" : "Unknown")) <<
+          ", frame id: " << frame_id;
+    }
   }
   // Process TMMBR and REMB first to avoid multiple callbacks
   // to OnNetworkChanged.

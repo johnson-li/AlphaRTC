@@ -150,7 +150,7 @@ void RemoteEstimatorProxy::IncomingPacket(int64_t arrival_time_ms,
   {
     RTC_LOG(LS_ERROR) << "Save data failed";
   }
-  RTC_LOG(LS_INFO) << out_data;
+  // RTC_LOG(LS_INFO) << out_data;
 }
 
 bool RemoteEstimatorProxy::LatestEstimate(std::vector<unsigned int>* ssrcs,

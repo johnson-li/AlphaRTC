@@ -541,7 +541,7 @@ void VideoReceiveStream2::RequestKeyFrame(int64_t timestamp_ms) {
 void VideoReceiveStream2::OnCompleteFrame(
     std::unique_ptr<video_coding::EncodedFrame> frame) {
   RTC_DCHECK_RUN_ON(&network_sequence_checker_);
-  config_.renderer->OnCompleteFrame0(frame->id.picture_id);
+  config_.renderer->OnCompleteFrame0(frame->first_rtp_sequence);
   
   // TODO(https://bugs.webrtc.org/9974): Consider removing this workaround.
   int64_t time_now_ms = clock_->TimeInMilliseconds();

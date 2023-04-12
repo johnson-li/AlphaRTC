@@ -655,6 +655,7 @@ void RtpVideoStreamReceiver::OnRtpPacket(const RtpPacketReceived& packet) {
     return;
   }
 
+  RTC_INFO << "OnRtpPacket, id: " << packet.SequenceNumber();
   if (!packet.recovered()) {
     // TODO(nisse): Exclude out-of-order packets?
     int64_t now_ms = clock_->TimeInMilliseconds();
@@ -889,7 +890,8 @@ void RtpVideoStreamReceiver::OnCompleteFrame(
       std::max(last_completed_picture_id_, frame->id.picture_id);
   RTC_INFO << "OnCompleteFrame, " << 
       webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
-      ", id: " << frame->id.picture_id;
+      ", id: " << frame->id.picture_id <<
+      ", first rtp seq: " << frame->first_rtp_sequence;
   complete_frame_callback_->OnCompleteFrame(std::move(frame));
 }
 

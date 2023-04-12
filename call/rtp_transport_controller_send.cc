@@ -397,11 +397,6 @@ void RtpTransportControllerSend::EnablePeriodicAlrProbing(bool enable) {
 }
 void RtpTransportControllerSend::OnSentPacket(
     const rtc::SentPacket& sent_packet) {
-  RTC_LOG(LS_INFO) << "OnSentPacket, " << 
-      webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
-      ", id: " << sent_packet.packet_id << 
-      ", type: " << sent_packet.info.packet_type << 
-      ", size: " << sent_packet.info.packet_size_bytes;
   task_queue_.PostTask([this, sent_packet]() {
     RTC_DCHECK_RUN_ON(&task_queue_);
     absl::optional<SentPacket> packet_msg =
@@ -410,6 +405,11 @@ void RtpTransportControllerSend::OnSentPacket(
         transport_feedback_adapter_.GetOutstandingData());
     if (packet_msg && controller_)
       PostUpdates(controller_->OnSentPacket(*packet_msg));
+    RTC_LOG(LS_INFO) << "OnSentPacket, " << 
+        webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+        ", id: " << sent_packet.packet_id << 
+        ", type: " << sent_packet.info.packet_type << 
+        ", size: " << sent_packet.info.packet_size_bytes;
   });
 }
 
