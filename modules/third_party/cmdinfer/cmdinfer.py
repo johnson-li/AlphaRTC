@@ -64,23 +64,26 @@ def main(ifd = sys.stdin, ofd = sys.stdout):
     estimator_class = find_estimator_class()
     estimator = estimator_class()
     while True:
-        line = ifd.readline()
-        if not line:
-            break
-        if isinstance(line, bytes):
-            line = line.decode("utf-8")
-        stats = fetch_stats(line)
-        if stats:
-            estimator.report_states(stats)
-            continue
-        request = request_estimated_bandwidth(line)
-        if request:
-            bandwidth = estimator.get_estimated_bandwidth()
-            ofd.write("{}\n".format(int(bandwidth)).encode("utf-8"))
-            ofd.flush()
-            continue
-        sys.stdout.write(line)
-        sys.stdout.flush()
+        try:
+            line = ifd.readline()
+            if not line:
+                break
+            if isinstance(line, bytes):
+                line = line.decode("utf-8")
+            stats = fetch_stats(line)
+            if stats:
+                estimator.report_states(stats)
+                continue
+            request = request_estimated_bandwidth(line)
+            if request:
+                bandwidth = estimator.get_estimated_bandwidth()
+                ofd.write("{}\n".format(int(bandwidth)).encode("utf-8"))
+                ofd.flush()
+                continue
+            sys.stdout.write(line)
+            sys.stdout.flush()
+        except Exception as e:
+            print(e)
 
 
 def test():

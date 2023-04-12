@@ -550,6 +550,8 @@ bool RTPSenderVideo::SendVideo(
 
   bool first_frame = first_frame_sent_();
   std::vector<std::unique_ptr<RtpPacketToSend>> rtp_packets;
+  uint32_t first_rtp_id = 0;
+  uint32_t last_rtp_id = 0;
   for (size_t i = 0; i < num_packets; ++i) {
     std::unique_ptr<RtpPacketToSend> packet;
     int expected_payload_capacity;
@@ -597,6 +599,13 @@ bool RTPSenderVideo::SendVideo(
       }
     }
 
+    if (i == 0) {
+      first_rtp_id = packet->SequenceNumber();
+    }
+    else if (i == num_packets - 1) {
+      last_rtp_id = packet->SequenceNumber();
+    }
+
     if (red_enabled()) {
       std::unique_ptr<RtpPacketToSend> red_packet(new RtpPacketToSend(*packet));
       BuildRedPayload(*packet, red_packet.get());
@@ -622,6 +631,9 @@ bool RTPSenderVideo::SendVideo(
       }
     }
   }
+
+  RTC_INFO << "SendVideo, frame id: " << video_header.frame_id0 << 
+      ", first RTP id: " << first_rtp_id << ", last RTP id: " << last_rtp_id;
 
   if (fec_generator_) {
     // Fetch any FEC packets generated from the media frame and add them to

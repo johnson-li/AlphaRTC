@@ -201,6 +201,7 @@ void PacedSender::SendRtpPacket(std::unique_ptr<RtpPacketToSend> packet,
       ", id: " << packet->SequenceNumber() << 
       ", payload type: " << packet->PayloadType() <<
       ", payload size: " << packet->payload_size() <<
+      ", capture ts: " << packet->capture_time_ms() <<
       ", size: " << packet->size();
   critsect_.Leave();
   packet_router_->SendPacket(std::move(packet), cluster_info);

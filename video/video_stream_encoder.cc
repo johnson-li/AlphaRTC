@@ -1443,7 +1443,7 @@ EncodedImageCallback::Result VideoStreamEncoder::OnEncodedImage(
     const CodecSpecificInfo* codec_specific_info,
     const RTPFragmentationHeader* fragmentation) {
   RTC_LOG(LS_INFO) << "RunPostEncode, " << webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
-      // ", id: " << encoded_image << 
+      ", id: " << encoded_image.frame_id << 
       ", codec: " << codec_specific_info->codecType <<
       ", size: " << encoded_image.size() <<
       ", width: " << encoded_image._encodedWidth <<
