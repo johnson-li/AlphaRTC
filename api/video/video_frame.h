@@ -236,6 +236,8 @@ class RTC_EXPORT VideoFrame {
     processing_time_ = processing_time;
   }
 
+ int64_t first_rtp_sequence;
+
  private:
   VideoFrame(uint16_t id,
              const rtc::scoped_refptr<VideoFrameBuffer>& buffer,

@@ -74,8 +74,6 @@ class EncodedFrame : public webrtc::VCMEncodedFrame {
   bool is_keyframe() const { return num_references == 0; }
 
   VideoLayerFrameId id;
-  // Johnson, the first rtp sequence number is used as the frame id
-  uint32_t first_rtp_sequence;
 
   // TODO(philipel): Add simple modify/access functions to prevent adding too
   // many |references|.

@@ -1,6 +1,6 @@
 {
     "serverless_connection": {
-        "autoclose": 20,
+        "autoclose": 30,
         "sender": {
             "enabled": true,
             "dest_ip": "0.0.0.0",
@@ -10,7 +10,7 @@
             "enabled": false
         }
     },
-    "bwe_feedback_duration": 200,
+    "bwe_feedback_duration": 2000,
     "video_source": {
         "video_disabled": {
             "enabled": false

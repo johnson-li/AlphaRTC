@@ -1,6 +1,6 @@
 {
     "serverless_connection": {
-        "autoclose": 20,
+        "autoclose": 30,
         "sender": {
             "enabled": false
         },
@@ -10,7 +10,7 @@
             "listening_port": 8000
         }
     },
-    "bwe_feedback_duration": 200,
+    "bwe_feedback_duration": 2000,
     "video_source": {
         "video_disabled": {
             "enabled": true

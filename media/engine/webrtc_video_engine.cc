@@ -2977,7 +2977,7 @@ void WebRtcVideoChannel::OnFrame(
   invoker_.AsyncInvoke<void>(
       RTC_FROM_HERE, worker_thread_, [this, frame] {
         RTC_DCHECK_RUN_ON(&thread_checker_);
-        call_->Receiver()->OnFrameDecoded(frame.id());
+        call_->Receiver()->OnFrameDecoded(frame.first_rtp_sequence);
       });
 }
 

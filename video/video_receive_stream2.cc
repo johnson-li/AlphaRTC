@@ -667,6 +667,7 @@ void VideoReceiveStream2::HandleEncodedFrame(
         webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
         ", id: " << frame->id.picture_id << 
         ", codec: " << frame->CodecSpecific()->codecType <<
+        ", first rtp id: " << frame->first_rtp_sequence <<
         ", decode result: " << decode_result;
     keyframe_required_ = false;
     frame_decoded_ = true;

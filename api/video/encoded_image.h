@@ -169,6 +169,9 @@ class RTC_EXPORT EncodedImage {
   // already own the underlying data, make an owned copy.
   void Retain();
 
+  // Johnson, the first rtp sequence number is used as the frame id
+  uint32_t first_rtp_sequence;
+
   uint32_t _encodedWidth = 0;
   uint32_t _encodedHeight = 0;
   // NTP time of the capture time in local timebase in milliseconds.
