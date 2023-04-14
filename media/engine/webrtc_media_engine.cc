@@ -28,7 +28,6 @@ namespace cricket {
 
 std::unique_ptr<MediaEngineInterface> CreateMediaEngine(
     MediaEngineDependencies dependencies) {
-  // RTC_INFO << "asdfasdf, " << base::debug::StackTraceToString(base::debug::GetStackTrace());
   auto audio_engine = std::make_unique<WebRtcVoiceEngine>(
       dependencies.task_queue_factory, std::move(dependencies.adm),
       std::move(dependencies.audio_encoder_factory),

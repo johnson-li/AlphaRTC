@@ -406,6 +406,7 @@ void GoogCcNetworkController::UpdateCongestionWindowSize() {
 
 NetworkControlUpdate GoogCcNetworkController::OnTransportPacketsFeedback(
     TransportPacketsFeedback report) {
+  RTC_INFO << "GoogCc in use";
   if (report.packet_feedbacks.empty()) {
     // TODO(bugs.webrtc.org/10125): Design a better mechanism to safe-guard
     // against building very large network queues.
