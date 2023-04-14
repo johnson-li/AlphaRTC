@@ -22,7 +22,7 @@
             "enabled": true,
             "height": 2160,
             "width": 3840,
-            "fps": 10,
+            "fps": 100,
             "file_path": "testmedia/drive.yuv"
         }
     },

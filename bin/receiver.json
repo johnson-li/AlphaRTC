@@ -22,7 +22,7 @@
             "enabled": false,
             "height": 240,
             "width": 320,
-            "fps": 10,
+            "fps": 100,
             "file_path": "testmedia/test.yuv"
         }
     },
@@ -43,7 +43,7 @@
         "video": {
             "width": 3840,
             "height": 2160,
-            "fps": 10,
+            "fps": 100,
             "file_path": "../output/outvideo.yuv"
         }
     },

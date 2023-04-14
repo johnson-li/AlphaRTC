@@ -524,6 +524,7 @@ void VideoStreamEncoder::ReconfigureEncoder() {
   encoder_bitrate_limits_ =
       encoder_->GetEncoderInfo().GetEncoderBitrateLimitsForResolution(
           last_frame_info_->width * last_frame_info_->height);
+  RTC_INFO << "ReconfigureEncoder, hardware accelerated: " << encoder_->GetEncoderInfo().is_hardware_accelerated;
 
   if (streams.size() == 1 && encoder_bitrate_limits_) {
     // Bitrate limits can be set by app (in SDP or RtpEncodingParameters) or/and
@@ -1442,7 +1443,8 @@ EncodedImageCallback::Result VideoStreamEncoder::OnEncodedImage(
     const EncodedImage& encoded_image,
     const CodecSpecificInfo* codec_specific_info,
     const RTPFragmentationHeader* fragmentation) {
-  RTC_LOG(LS_INFO) << "RunPostEncode, " << webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
+  RTC_LOG(LS_INFO) << "RunPostEncode, " << 
+      webrtc::Clock::GetRealTimeClock()->TimeInMilliseconds() << 
       ", id: " << encoded_image.frame_id << 
       ", codec: " << codec_specific_info->codecType <<
       ", size: " << encoded_image.size() <<

@@ -482,6 +482,7 @@ int32_t H264EncoderImpl::Encode(
     encoded_images_[i].SetTimestamp(input_frame.timestamp());
     encoded_images_[i]._frameType = ConvertToVideoFrameType(info.eFrameType);
     encoded_images_[i].SetSpatialIndex(configurations_[i].simulcast_idx);
+    encoded_images_[i].frame_id = input_frame.id();
 
     // Split encoded image up into fragments. This also updates
     // |encoded_image_|.

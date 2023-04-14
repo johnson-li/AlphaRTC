@@ -3203,8 +3203,7 @@ WebRtcVideoChannel::MapCodecs(const std::vector<VideoCodec>& codecs) {
   absl::optional<int> flexfec_payload_type;
 
   for (const VideoCodec& in_codec : codecs) {
-    RTC_LOG(LS_INFO) << "Codec name: " << in_codec.name << 
-        ", coded type: " << in_codec.GetCodecType();
+    RTC_LOG(LS_INFO) << "Codec: " << in_codec.ToString();
     const int payload_type = in_codec.id;
 
     if (payload_codec_type.find(payload_type) != payload_codec_type.end()) {
@@ -3267,13 +3266,13 @@ WebRtcVideoChannel::MapCodecs(const std::vector<VideoCodec>& codecs) {
 
       case VideoCodec::CODEC_VIDEO: {
         // Johnson
-        video_codecs.emplace_back();
-        video_codecs.back().codec = in_codec;
-        // auto codec = kVp8CodecName;
-        // if (codec && absl::EqualsIgnoreCase(in_codec.name, codec)) {
-        //   video_codecs.emplace_back();
-        //   video_codecs.back().codec = in_codec;
-        // }
+        // video_codecs.emplace_back();
+        // video_codecs.back().codec = in_codec;
+        auto codec = kH264CodecName;
+        if (codec && absl::EqualsIgnoreCase(in_codec.name, codec)) {
+          video_codecs.emplace_back();
+          video_codecs.back().codec = in_codec;
+        }
         break;
       }
     }
